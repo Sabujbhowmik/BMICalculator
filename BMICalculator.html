@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BMI Calculator | Final Year Project</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="page">
+    <div class="container">
+      <header>
+        <div class="header-main">
+          <div>
+            <h1>
+              <i class="fas fa-weight"></i>
+              BMI Calculator
+            </h1>
+            <p>
+              Advanced Body Mass Index Calculator with data tracking, visualization,
+              and health recommendations.
+              <br />
+              Final Year Project by <strong>Sabuj Bhowmik and Team</strong>
+            </p>
+          </div>
+
+          <!-- Theme Toggle -->
+          <button id="themeToggle" class="theme-toggle">
+            <i class="fas fa-moon"></i>
+            <span>Dark Mode</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="app-container">
+        <!-- Calculator Section -->
+        <div class="calculator-card glass-card">
+          <h2 class="card-title">
+            <i class="fas fa-calculator"></i>
+            Calculate BMI
+          </h2>
+
+          <div class="unit-toggle">
+            <button id="metricBtn" class="active">Metric (kg, cm)</button>
+            <button id="imperialBtn">Imperial (lbs, ft+in)</button>
+          </div>
+
+          <!-- Metric -->
+          <div id="metricSystem" class="measurement-system active">
+            <div class="input-group">
+              <label for="weightMetric">Weight (kg)</label>
+              <input type="number" id="weightMetric" placeholder="Enter weight in kilograms" min="1" max="300"
+                step="0.1" />
+            </div>
+            <div class="input-group">
+              <label for="heightMetric">Height (cm)</label>
+              <input type="number" id="heightMetric" placeholder="Enter height in centimeters" min="50" max="250"
+                step="0.1" />
+            </div>
+          </div>
+
+          <!-- Imperial -->
+          <div id="imperialSystem" class="measurement-system">
+            <div class="input-group">
+              <label for="weightImperial">Weight (lbs)</label>
+              <input type="number" id="weightImperial" placeholder="Enter weight in pounds" min="1" max="660"
+                step="0.1" />
+            </div>
+            <div class="input-group">
+              <label>Height (feet & inches)</label>
+              <div class="dual-input">
+                <input type="number" id="feet" placeholder="Feet" min="1" max="8" />
+                <input type="number" id="inches" placeholder="Inches" min="0" max="11" />
+              </div>
+            </div>
+          </div>
+          <!-- Full Name -->
+          <div class="input-group">
+            <label for="fullName">Full Name (optional)</label>
+            <input type="text" id="fullName" placeholder="Enter your full name" maxlength="50" />
+          </div>
+
+
+          <div class="input-group">
+            <label for="age">Age (optional)</label>
+            <input type="number" id="age" placeholder="Enter your age" min="1" max="120" />
+          </div>
+
+          <div class="input-group">
+            <label for="gender">Gender (optional)</label>
+            <select id="gender">
+              <option value="">Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="button-row">
+            <button class="btn-primary" id="calculateBtn">
+              <i class="fas fa-play-circle"></i>
+              Calculate BMI
+            </button>
+            <button class="btn-secondary" id="resetBtn">
+              <i class="fas fa-rotate-left"></i>
+              Reset
+            </button>
+          </div>
+
+          <div class="info-note">
+            <i class="fas fa-circle-info"></i>
+            <span>
+              This calculator is for adults (18+). For children, BMI interpretation
+              differs.
+            </span>
+          </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-card glass-card">
+          <h2 class="card-title">
+            <i class="fas fa-chart-line"></i>
+            BMI Results
+          </h2>
+
+          <div class="bmi-result">
+            <div class="bmi-main">
+              <div class="bmi-value" id="bmiValue">--</div>
+              <div class="bmi-category" id="bmiCategory">
+                Enter your details
+              </div>
+              <div class="bmi-extra" id="bmiDetailsText">
+                Your BMI will be shown here with health interpretation.
+              </div>
+            </div>
+
+            <div class="bmi-scale">
+              <div class="bmi-indicator" id="bmiIndicator"></div>
+              <div class="bmi-pointer" id="bmiPointer">
+                <i class="fas fa-caret-down"></i>
+              </div>
+            </div>
+
+            <div class="scale-labels">
+              <span>Underweight<br />
+                < 18.5</span>
+                  <span>Normal<br />18.5 - 24.9</span>
+                  <span>Overweight<br />25 - 29.9</span>
+                  <span>Obese<br />≥ 30</span>
+            </div>
+          </div>
+
+          <div class="quick-stats" id="historyStats">
+            <div class="stat-item">
+              <span class="stat-label">Total Calculations</span>
+              <span class="stat-value" id="statTotal">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Average BMI</span>
+              <span class="stat-value" id="statAverage">--</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Last BMI</span>
+              <span class="stat-value" id="statLast">--</span>
+            </div>
+          </div>
+
+          <div class="health-tips">
+            <h3>
+              <i class="fas fa-heartbeat"></i>
+              Health Recommendations
+            </h3>
+            <ul id="healthTips">
+              <li>
+                Enter your weight and height to get personalized health
+                recommendations.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- History Section -->
+      <div class="history-card glass-card">
+        <div class="history-header">
+          <h2 class="card-title">
+            <i class="fas fa-history"></i>
+            Calculation History
+          </h2>
+          <div class="history-actions-top">
+            <button class="btn-outline" id="exportCsvBtn">
+              <i class="fas fa-file-arrow-down"></i>
+              Export CSV
+            </button>
+            <button class="btn-danger" id="clearHistoryBtn" title="Clear all history">
+              <i class="fas fa-trash"></i>
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <div class="history-list" id="historyList">
+          <div class="empty-history">
+            <i class="fas fa-history"></i>
+            <h3>No calculations yet</h3>
+            <p>Your BMI calculations will appear here</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="charts-section">
+        <div class="chart-container glass-card">
+          <h3 class="chart-title">
+            <i class="fas fa-chart-bar"></i>
+            BMI Trend
+          </h3>
+          <canvas id="bmiTrendChart"></canvas>
+        </div>
+
+        <div class="chart-container glass-card">
+          <h3 class="chart-title">
+            <i class="fas fa-chart-pie"></i>
+            Category Distribution
+          </h3>
+          <canvas id="categoryChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Diet Plan Section -->
+      <div class="diet-plan-card glass-card">
+        <h2 class="card-title">
+          <i class="fas fa-utensils"></i>
+          Personalized Diet Plan
+        </h2>
+
+        <div class="diet-plan-info">
+          <p id="dietPlanIntro">
+            Enter your details to get a personalized diet plan based on your BMI
+            category.
+          </p>
+
+          <div class="diet-category-selector">
+            <h3>
+              <i class="fas fa-filter"></i>
+              View Diet Plans by Category
+            </h3>
+            <div class="category-buttons">
+              <button class="diet-cat-btn active" data-category="underweight">
+                Underweight
+              </button>
+              <button class="diet-cat-btn" data-category="normal">
+                Normal Weight
+              </button>
+              <button class="diet-cat-btn" data-category="overweight">
+                Overweight
+              </button>
+              <button class="diet-cat-btn" data-category="obese">
+                Obese
+              </button>
+            </div>
+          </div>
+
+          <div class="diet-plan-details" id="dietPlanDetails">
+            <div class="diet-plan-empty">
+              <i class="fas fa-utensils"></i>
+              <h3>Select a category to view diet plan</h3>
+              <p>
+                Choose from the categories above or calculate your BMI for
+                personalized recommendations.
+              </p>
+            </div>
+          </div>
+
+          <div class="weekly-meal-plan" id="weeklyMealPlan">
+            <!-- Weekly meal plan will be generated here -->
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <p>
+          Final Year Project - BMI Calculator |
+          Developed by <strong>Sabuj Bhowmik and Team</strong> |
+          <span id="currentYear"></span>
+        </p>
+        <p>
+          This tool is for informational purposes only. Consult a healthcare professional
+          for medical advice.
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="historyModal">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Calculation Details</h3>
+        <button class="close-modal" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script src="script.js"></script>
+</body>
+
+</html>
